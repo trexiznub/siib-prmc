@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PR & Media Committee — SIIB</title>
+<meta name="description" content="The official digital hub of the Public Relations & Media Committee, Symbiosis Institute of International Business. Connecting stories. Building communities. Shaping the SIIB experience.">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0a0a0a;
+    --panel:#111111;
+    --panel-2:#151515;
+    --crimson:#800404;
+    --crimson-bright:#c21c1c;
+    --burgundy:#340202;
+    --rose:#ffebeb;
+    --white:#ffffff;
+    --gray:#9a9a9e;
+    --gray-dim:#66666a;
+    --line: rgba(255,255,255,0.08);
+    --line-bright: rgba(255,255,255,0.16);
+    --radius: 20px;
+    --disp: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--black);
+    color:var(--white);
+    font-family:var(--body);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    cursor:default;
+  }
+  ::selection{background:var(--crimson);color:#fff;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+
+  /* ---------- background layers ---------- */
+  .bg-fixed{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .bg-grid{
+    position:absolute; inset:-2px;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity:.28;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 10%, transparent 75%);
+  }
+  .bg-glow{
+    position:absolute; width:1200px; height:1200px; border-radius:50%;
+    background: radial-gradient(circle, rgba(128,4,4,0.55) 0%, rgba(128,4,4,0.12) 42%, transparent 70%);
+    filter: blur(40px);
+    top:-520px; left:50%; transform:translateX(-50%);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .bg-glow.two{
+    width:700px;height:700px; top:auto; bottom:-360px; left:auto; right:-200px; transform:none;
+    background: radial-gradient(circle, rgba(194,28,28,0.35) 0%, transparent 70%);
+    animation: drift2 26s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    0%{transform:translateX(-52%) translateY(0px) scale(1);}
+    100%{transform:translateX(-48%) translateY(60px) scale(1.08);}
+  }
+  @keyframes drift2{
+    0%{transform:translateY(0) scale(1);}
+    100%{transform:translateY(-70px) scale(1.12);}
+  }
+  .noise{
+    position:absolute; inset:0; opacity:.035; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* cursor glow (desktop) */
+  .cursor-glow{
+    position:fixed; width:420px; height:420px; border-radius:50%;
+    background: radial-gradient(circle, rgba(128,4,4,0.16) 0%, transparent 70%);
+    pointer-events:none; z-index:1; transform:translate(-50%,-50%);
+    transition: opacity .3s ease; opacity:0; will-change:transform;
+  }
+
+  section, header, footer{ position:relative; z-index:2; }
+
+  /* ---------- nav ---------- */
+  .nav-wrap{
+    position:fixed; top:20px; left:50%; transform:translate(-50%,-90px);
+    z-index:50; display:flex; align-items:center; gap:6px;
+    padding:8px 8px 8px 16px;
+    background:rgba(17,17,17,0.55);
+    border:1px solid var(--line);
+    border-radius:100px;
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    transition: transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  .nav-wrap.show{ transform:translate(-50%,0); }
+  .nav-brand{ display:flex; align-items:center; gap:8px; padding-right:10px; border-right:1px solid var(--line); margin-right:4px;}
+  .nav-brand img{width:22px;height:22px;}
+  .nav-brand span{ font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--gray); white-space:nowrap;}
+  .nav-links{ display:flex; gap:2px; }
+  .nav-links a{
+    font-size:13px; padding:8px 14px; border-radius:100px; color:var(--gray);
+    transition: color .25s ease, background .25s ease;
+    white-space:nowrap;
+  }
+  .nav-links a:hover{ color:var(--white); background:rgba(255,255,255,0.06); }
+  @media (max-width: 860px){ .nav-links{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:120px 24px 80px; position:relative;
+  }
+  .seal-ring{
+    position:absolute; width:640px; height:640px; border-radius:50%;
+    border:1px dashed var(--line-bright); top:50%; left:50%;
+    transform:translate(-50%,-52%);
+    animation: spin 90s linear infinite;
+  }
+  .seal-ring.inner{ width:520px; height:520px; border-style:solid; border-color:var(--line); animation-duration:70s; animation-direction:reverse; }
+  @keyframes spin{ to{ transform:translate(-50%,-52%) rotate(360deg);} }
+
+  .logo-halo{
+    position:relative; width:176px; height:176px; margin-bottom:36px;
+    display:flex; align-items:center; justify-content:center;
+    animation: floaty 6s ease-in-out infinite;
+  }
+  .logo-halo::before{
+    content:''; position:absolute; inset:-40px; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,235,235,0.18) 0%, rgba(128,4,4,0.14) 45%, transparent 72%);
+    filter: blur(6px);
+    animation: pulse 4.5s ease-in-out infinite;
+  }
+  .logo-halo img{ position:relative; width:100%; height:100%; filter: drop-shadow(0 8px 30px rgba(128,4,4,0.45)); }
+  @keyframes floaty{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+  @keyframes pulse{ 0%,100%{opacity:.7; transform:scale(1);} 50%{opacity:1; transform:scale(1.06);} }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--gray); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+    opacity:0; animation: rise .8s .1s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--crimson-bright); box-shadow:0 0 12px var(--crimson-bright); }
+
+  h1.hero-title{
+    font-family:var(--disp); font-weight:600; letter-spacing:-0.03em; line-height:1.02;
+    font-size:clamp(2.6rem, 7.5vw, 5.6rem);
+    max-width:1000px;
+    opacity:0; animation: rise .9s .2s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  h1.hero-title .accent{
+    background: linear-gradient(120deg, var(--rose) 0%, var(--crimson-bright) 55%, var(--crimson) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{
+    margin-top:26px; font-size:clamp(1rem,2vw,1.25rem); color:var(--gray); font-weight:300;
+    max-width:520px; line-height:1.6;
+    opacity:0; animation: rise .9s .35s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .hero-sub b{ color:var(--white); font-weight:500; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
+
+  .hero-cta{
+    margin-top:44px; display:flex; gap:14px; align-items:center;
+    opacity:0; animation: rise .9s .5s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .btn{
+    font-family:var(--body); font-size:14px; font-weight:600; padding:14px 26px; border-radius:100px;
+    display:inline-flex; align-items:center; gap:8px; transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, background .3s ease;
+    border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{ background:linear-gradient(135deg,var(--crimson-bright),var(--crimson)); color:#fff; box-shadow:0 8px 30px rgba(128,4,4,0.4);}
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 14px 40px rgba(128,4,4,0.55);}
+  .btn-ghost{ background:rgba(255,255,255,0.04); border-color:var(--line); color:var(--white);}
+  .btn-ghost:hover{ background:rgba(255,255,255,0.09); transform:translateY(-3px);}
+
+  .scroll-cue{
+    position:absolute; bottom:38px; left:50%; transform:translateX(-50%);
+    font-family:var(--mono); font-size:10px; letter-spacing:.15em; color:var(--gray-dim); text-transform:uppercase;
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    opacity:0; animation: rise 1s .8s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gray-dim), transparent); animation: scrolldown 2s ease-in-out infinite; }
+  @keyframes scrolldown{ 0%{opacity:0; transform:scaleY(0.2); transform-origin:top;} 40%{opacity:1; transform:scaleY(1); transform-origin:top;} 100%{opacity:0; transform:scaleY(0.2); transform-origin:bottom;} }
+
+  /* ---------- reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+  .reveal-stagger > *{ opacity:0; transform:translateY(24px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal-stagger.in > *{ opacity:1; transform:translateY(0); }
+  .reveal-stagger.in > *:nth-child(1){transition-delay:.03s;}
+  .reveal-stagger.in > *:nth-child(2){transition-delay:.09s;}
+  .reveal-stagger.in > *:nth-child(3){transition-delay:.15s;}
+  .reveal-stagger.in > *:nth-child(4){transition-delay:.21s;}
+  .reveal-stagger.in > *:nth-child(5){transition-delay:.27s;}
+  .reveal-stagger.in > *:nth-child(6){transition-delay:.33s;}
+  .reveal-stagger.in > *:nth-child(7){transition-delay:.39s;}
+  .reveal-stagger.in > *:nth-child(8){transition-delay:.45s;}
+  .reveal-stagger.in > *:nth-child(9){transition-delay:.51s;}
+
+  /* ---------- section shell ---------- */
+  .section{ padding:130px 24px; max-width:1180px; margin:0 auto; }
+  .section-head{ margin-bottom:56px; }
+  .kicker{
+    font-family:var(--mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--crimson-bright);
+    display:flex; align-items:center; gap:10px; margin-bottom:16px;
+  }
+  .kicker::before{ content:''; width:22px; height:1px; background:var(--crimson-bright); }
+  .section-title{
+    font-family:var(--disp); font-weight:600; letter-spacing:-0.02em; font-size:clamp(1.8rem,3.6vw,2.7rem);
+  }
+  .section-desc{ margin-top:16px; color:var(--gray); max-width:560px; font-weight:300; line-height:1.7; font-size:1.02rem;}
+
+  /* ---------- about ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap:60px; align-items:start; }
+  @media(max-width:860px){ .about-grid{grid-template-columns:1fr; gap:36px;} }
+  .about-copy p{ color:var(--gray); font-weight:300; line-height:1.85; font-size:1.05rem; margin-bottom:18px; }
+  .about-copy strong{ color:var(--white); font-weight:500; }
+  .stat-stack{ display:flex; flex-direction:column; gap:1px; background:var(--line); border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);}
+  .stat-row{ background:var(--panel); padding:26px 28px; display:flex; justify-content:space-between; align-items:center; gap:20px;}
+  .stat-row .label{ font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--gray); text-transform:uppercase;}
+  .stat-row .val{ font-family:var(--disp); font-size:1.1rem; font-weight:600; color:var(--white); text-align:right;}
+
+  /* ---------- bento social grid ---------- */
+  .bento{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media(max-width:900px){ .bento{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:520px){ .bento{grid-template-columns:1fr;} }
+  .card{
+    position:relative; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:28px; overflow:hidden; transition: transform .45s cubic-bezier(.16,1,.3,1), border-color .4s ease, background .4s ease;
+    grid-column:span 1;
+  }
+  .card.span2{ grid-column:span 2; }
+  @media(max-width:900px){ .card.span2{ grid-column:span 2; } }
+  @media(max-width:520px){ .card.span2{ grid-column:span 1; } }
+  .card::before{
+    content:''; position:absolute; inset:0; opacity:0; transition:opacity .45s ease; pointer-events:none;
+    background: radial-gradient(320px circle at var(--mx,50%) var(--my,50%), rgba(194,28,28,0.16), transparent 60%);
+  }
+  .card:hover{ transform:translateY(-6px); border-color:var(--line-bright); background:var(--panel-2); }
+  .card:hover::before{ opacity:1; }
+  .plat-icon{
+    width:44px; height:44px; border-radius:12px; background:rgba(128,4,4,0.14); border:1px solid rgba(128,4,4,0.35);
+    display:flex; align-items:center; justify-content:center; margin-bottom:22px; color:var(--rose);
+    transition: background .4s ease, transform .4s ease;
+  }
+  .card:hover .plat-icon{ background:linear-gradient(135deg,var(--crimson-bright),var(--crimson)); transform:scale(1.06) rotate(-4deg); color:#fff; }
+  .plat-name{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin-bottom:8px; }
+  .plat-desc{ color:var(--gray); font-size:.9rem; font-weight:300; line-height:1.6; margin-bottom:24px; }
+  .plat-link{
+    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--white);
+    padding-bottom:2px; border-bottom:1px solid var(--line-bright);
+    transition: gap .3s ease, color .3s ease, border-color .3s ease;
+  }
+  .plat-link:hover{ gap:12px; color:var(--rose); border-color:var(--rose); }
+  .plat-link svg{ transition:transform .3s ease; }
+  .plat-link:hover svg{ transform:translateX(2px); }
+
+  /* ---------- updates ---------- */
+  .updates-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:900px){ .updates-grid{grid-template-columns:1fr;} }
+  .u-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px; transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease;}
+  .u-card:hover{ transform:translateY(-5px); border-color:var(--line-bright); }
+  .u-tag{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--crimson-bright); background:rgba(128,4,4,0.15); border:1px solid rgba(128,4,4,0.3); padding:5px 10px; border-radius:100px; display:inline-block; margin-bottom:18px;}
+  .u-title{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin-bottom:10px; line-height:1.3;}
+  .u-desc{ color:var(--gray); font-size:.88rem; font-weight:300; line-height:1.65; margin-bottom:20px;}
+  .u-date{ font-family:var(--mono); font-size:11px; color:var(--gray-dim); letter-spacing:.05em; }
+
+  /* ---------- campaigns carousel ---------- */
+  .carousel-wrap{ position:relative; margin:0 -24px; padding:0 24px; }
+  .carousel{
+    display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; padding:6px 0 22px;
+    scrollbar-width:none;
+  }
+  .carousel::-webkit-scrollbar{ display:none; }
+  .c-card{
+    scroll-snap-align:start; flex:0 0 auto; width:min(340px, 82vw); border-radius:var(--radius);
+    border:1px solid var(--line); overflow:hidden; background:var(--panel);
+    transition: transform .45s cubic-bezier(.16,1,.3,1), border-color .4s ease;
+  }
+  .c-card:hover{ transform:translateY(-6px); border-color:var(--line-bright); }
+  .c-media{ height:200px; position:relative; display:flex; align-items:flex-end; padding:20px; overflow:hidden;}
+  .c-media .num{ font-family:var(--mono); font-size:12px; color:rgba(255,255,255,0.55); letter-spacing:.1em; position:relative; z-index:2;}
+  .c-media::after{ content:''; position:absolute; inset:0; background:linear-gradient(160deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55)); }
+  .c-body{ padding:22px 22px 26px; }
+  .c-title{ font-family:var(--disp); font-weight:600; font-size:1.12rem; margin-bottom:8px;}
+  .c-desc{ color:var(--gray); font-size:.87rem; font-weight:300; line-height:1.6; }
+  .carousel-hint{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-dim); text-align:right; margin-top:2px;}
+
+  /* ---------- committee ---------- */
+  .committee-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media(max-width:900px){ .committee-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:480px){ .committee-grid{grid-template-columns:1fr;} }
+  .m-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px; text-align:center; transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease;}
+  .m-card:hover{ transform:translateY(-5px); border-color:var(--line-bright);}
+.m-avatar{
+    width:90px;
+    height:90px;
+    margin:0 auto 18px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid rgba(255,255,255,.08);
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+.m-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.4s;
+}
+.m-card:hover .m-avatar img{
+    transform:scale(1.08);
+}
+  .m-name{ font-family:var(--disp); font-weight:600; font-size:1.02rem; margin-bottom:4px;}
+  .m-role{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); margin-bottom:18px;}
+  .m-links{ display:flex; justify-content:center; gap:10px;}
+  .m-links a{ width:34px; height:34px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--gray); transition: all .3s ease;}
+  .m-links a:hover{ background:var(--crimson); border-color:var(--crimson); color:#fff; }
+.faculty-card{
+    max-width:650px;
+    margin:0 auto 70px;
+    padding:40px;
+
+    display:flex;
+    align-items:center;
+    gap:32px;
+
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:28px;
+
+    transition:.4s ease;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.faculty-card:hover{
+    transform:translateY(-6px);
+    border-color:var(--line-bright);
+}
+
+.faculty-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:radial-gradient(
+        circle at top right,
+        rgba(194,28,28,.15),
+        transparent 60%
+    );
+
+    pointer-events:none;
+}
+
+.faculty-avatar{
+    width:160px;
+    height:160px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+    overflow:hidden;
+
+    border:4px solid rgba(255,255,255,.08);
+
+    box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+
+.faculty-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.faculty-info{
+    flex:1;
+}
+
+.faculty-label{
+    display:inline-block;
+
+    padding:8px 18px;
+
+    margin-bottom:18px;
+
+    border-radius:999px;
+
+    background:rgba(194,28,28,.12);
+
+    color:#ffb4b4;
+
+    border:1px solid rgba(194,28,28,.35);
+
+    font-family:var(--mono);
+
+    font-size:11px;
+
+    letter-spacing:.12em;
+
+    text-transform:uppercase;
+}
+
+.faculty-info h3{
+    font-family:var(--disp);
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.faculty-info p{
+    color:var(--gray);
+    line-height:1.7;
+    margin-bottom:22px;
+}
+.faculty-links{
+    display:flex;
+    gap:14px;
+    margin-top:25px;
+}
+
+.faculty-links a{
+
+    width:48px;
+    height:48px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    border-radius:50%;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    background:rgba(255,255,255,.03);
+
+    color:white;
+
+    transition:all .35s ease;
+}
+
+.faculty-links a svg{
+    width:20px;
+    height:20px;
+}
+
+.faculty-links a:hover{
+
+    background:linear-gradient(
+        135deg,
+        var(--crimson-bright),
+        var(--crimson)
+    );
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 30px rgba(128,4,4,.35);
+
+    border-color:transparent;
+}
+
+}
+  /* ---------- contact ---------- */
+  .contact-card{
+    background: linear-gradient(160deg, var(--panel) 0%, #0d0d0d 100%);
+    border:1px solid var(--line); border-radius:28px; padding:56px;
+    display:grid; grid-template-columns:1fr 1fr; gap:50px; position:relative; overflow:hidden;
+  }
+  @media(max-width:800px){ .contact-card{grid-template-columns:1fr; padding:36px 26px;} }
+  .contact-card::before{
+    content:''; position:absolute; width:500px; height:500px; border-radius:50%; top:-220px; right:-200px;
+    background:radial-gradient(circle, rgba(128,4,4,0.35), transparent 70%); filter:blur(10px);
+  }
+  .contact-list{ display:flex; flex-direction:column; gap:0; position:relative; z-index:2;}
+  .contact-row{ display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line);}
+  .contact-row:last-child{ border-bottom:none; }
+  .contact-row .ic{ width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--rose); flex-shrink:0;}
+  .contact-row .txt .k{ font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-dim); margin-bottom:3px;}
+  .contact-row .txt .v{ font-size:.95rem; font-weight:500; }
+  .contact-row .txt .v:hover{ color:var(--rose); }
+  .map-panel{
+    position:relative; z-index:2; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 24px; min-height:260px;
+  }
+  .map-panel svg{ margin-bottom:18px; }
+  .map-panel .loc-title{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin-bottom:8px;}
+  .map-panel .loc-desc{ color:var(--gray); font-size:.85rem; font-weight:300; line-height:1.6; max-width:260px;}
+
+  /* ---------- footer ---------- */
+  footer{ padding:60px 24px 40px; text-align:center; border-top:1px solid var(--line); margin-top:40px;}
+  .foot-logo{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px;}
+  .foot-logo img{ width:26px; height:26px; }
+  .foot-logo span{ font-family:var(--disp); font-weight:600; font-size:1rem; }
+  footer p{ font-family:var(--mono); font-size:11px; color:var(--gray-dim); letter-spacing:.05em; }
+
+  /* utility */
+  .center-note{ text-align:center; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fixed">
+  <div class="bg-glow"></div>
+  <div class="bg-glow two"></div>
+  <div class="bg-grid"></div>
+  <div class="noise"></div>
+</div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- NAV -->
+<nav class="nav-wrap" id="navWrap">
+  <div class="nav-brand">
+  <img src="assets/logo.webp" alt="PRMC logo">
+    <span>PRMC · SIIB</span>
+  </div>
+  <div class="nav-links">
+    <a href="#platforms">Platforms</a>
+    <a href="#about">About</a>
+    <a href="#updates">Updates</a>
+    <a href="#campaigns">Campaigns</a>
+    <a href="#committee">Committee</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="seal-ring"></div>
+  <div class="seal-ring inner"></div>
+
+  <div class="logo-halo">
+<img src="assets/logo.webp" alt="PRMC Logo">
+  </div>
+
+  <div class="eyebrow"><span class="dot"></span> SIIB · Symbiosis Institute of International Business</div>
+
+  <h1 class="hero-title">Public Relations<br>&amp; <span class="accent">Media Committee</span></h1>
+
+  <p class="hero-sub">Connecting stories. Building communities. <b>Shaping the SIIB experience.</b> — the official media presence of the institute, all in one place.</p>
+
+  <div class="hero-cta">
+    <a href="#platforms" class="btn btn-primary">
+      Follow Our Platforms
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a href="#about" class="btn btn-ghost">About the Committee</a>
+  </div>
+
+  <div class="scroll-cue"><span class="line"></span>Scroll</div>
+</header>
+
+<!-- PLATFORMS -->
+<section class="section" id="platforms">
+  <div class="section-head reveal">
+    <div class="kicker">The Media Hub</div>
+    <h2 class="section-title">Follow Us Everywhere</h2>
+    <p class="section-desc">Every official PR & Media channel of SIIB, in one place. Pick a platform and stay in the loop.</p>
+  </div>
+
+  <div class="bento reveal-stagger">
+    <div class="card span2">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </div>
+      <div class="plat-name">Instagram</div>
+      <div class="plat-desc">Campus moments, event reels, and behind-the-scenes stories from SIIB — posted daily.</div>
+      <a class="plat-link" href="https://www.instagram.com/siib.pune/?hl=en" target="_blank">Follow @siib.pune <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg>
+      </div>
+      <div class="plat-name">LinkedIn</div>
+      <div class="plat-desc">Achievements, placements, and institute announcements for the professional network.</div>
+      <a class="plat-link" href="https://www.linkedin.com/school/symbiosis-institute-of-international-business/posts/?feedView=all" target="_blank">Connect <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <div class="plat-name">YouTube</div>
+      <div class="plat-desc">Event recaps, interviews, and the full SIIB Unlocked series.</div>
+      <a class="plat-link" href="https://www.youtube.com/@OfficialSIIB" target="_blank">Subscribe <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 3h-3a4 4 0 0 0-4 4v3H8v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </div>
+      <div class="plat-name">Facebook</div>
+      <div class="plat-desc">Institute news, alumni highlights, and community updates.</div>
+      <a class="plat-link" href="https://www.facebook.com/SymbiosisInstituteOfInternationalBusiness/" target="_blank">Like Page <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l7.5 8.5L4.5 20H7l6-6.8L18 20h2l-8-9L19.5 4H17l-5.5 6.2L7 4z"/></svg>
+      </div>
+      <div class="plat-name">X</div>
+      <div class="plat-desc">Real-time updates, quick announcements, and campus commentary.</div>
+      <a class="plat-link" href="https://x.com/SIIBTweets" target="_blank">Follow <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+   
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M8.5 8.7c.2-.5.7-.5 1-.5s.5 0 .7.5c.2.5.6 1.4.6 1.5s0 .3-.2.5c-.2.3-.4.4-.6.6-.2.2-.3.4-.1.7.2.4 1 1.6 2.1 2.2 1.5.9 1.6.6 1.9.6.3-.1.9-.7 1.1-1 .2-.3.4-.2.7-.1.3.1 1.7.8 2 1 .3.1.5.2.5.4 0 .2 0 1-.4 1.5-.4.5-1.7 1.2-2.7.9-1-.3-2.8-1-4.4-2.6-1.6-1.6-2.1-2.9-2.3-3.4-.2-.5-.2-1.2.1-1.6z" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <div class="plat-name">WhatsApp</div>
+      <div class="plat-desc">Join our channel for the fastest campus-wide announcements.</div>
+      <a class="plat-link" href="#" target="_blank">Join Channel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>
+      </div>
+      <div class="plat-name">Email</div>
+      <div class="plat-desc">For media queries, collaborations, and press inquiries.</div>
+      <a class="plat-link" href="mailto:pr@siib.ac.in">pr@siib.ac.in <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+
+    <div class="card">
+      <div class="plat-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>
+      </div>
+      <div class="plat-name">Website</div>
+      <div class="plat-desc">The full SIIB institute website — programmes, admissions, and more.</div>
+      <a class="plat-link" href="https://www.siib.ac.in" target="_blank">siib.ac.in <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="about-grid">
+    <div class="reveal">
+      <div class="kicker">Who We Are</div>
+      <h2 class="section-title" style="margin-bottom:26px;">The voice of SIIB, out in the open.</h2>
+      <div class="about-copy">
+        <p>The <strong>Public Relations & Media Committee</strong> is the storytelling engine of Symbiosis Institute of International Business. We capture campus life, cover institute events, and carry the achievements of students and faculty to the world.</p>
+        <p>From day-to-day announcements to flagship campaigns, we manage every official channel — making sure the SIIB story is told with clarity, consistency, and craft.</p>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="stat-stack">
+        <div class="stat-row"><span class="label">Role</span><span class="val">Campus Voice</span></div>
+        <div class="stat-row"><span class="label">Reach</span><span class="val">Every Platform</span></div>
+        <div class="stat-row"><span class="label">Focus</span><span class="val">Every Story</span></div>
+        <div class="stat-row"><span class="label">Access</span><span class="val">Scan &amp; Follow</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- UPDATES -->
+<section class="section" id="updates">
+  <div class="section-head reveal">
+    <div class="kicker">On Campus Now</div>
+    <h2 class="section-title">Latest From the Committee</h2>
+    <p class="section-desc">Events, campaigns, achievements, and announcements — refreshed as things happen.</p>
+  </div>
+  <div class="updates-grid reveal-stagger">
+    <div class="u-card">
+      <span class="u-tag">Event</span>
+      <div class="u-title">Orientation Week Coverage Live</div>
+      <div class="u-desc">Full photo and video coverage of the new batch's orientation, now live across all channels.</div>
+      <div class="u-date">Aug 2026</div>
+    </div>
+    <div class="u-card">
+      <span class="u-tag">Campaign</span>
+      <div class="u-title">Opening Lines — Season 3</div>
+      <div class="u-desc">A new season of first-impression stories from the incoming SIIB batch.</div>
+      <div class="u-date">Aug 2026</div>
+    </div>
+    <div class="u-card">
+      <span class="u-tag">Achievement</span>
+      <div class="u-title">SIIB Recognised at National PR Summit</div>
+      <div class="u-desc">The committee's work was featured for its campus storytelling approach.</div>
+      <div class="u-date">Jul 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAMPAIGNS -->
+<section class="section" id="campaigns">
+  <div class="section-head reveal">
+    <div class="kicker">Featured Work</div>
+    <h2 class="section-title">Campaigns We're Proud Of</h2>
+    <p class="section-desc">A running archive of the committee's flagship content series.</p>
+  </div>
+  <div class="carousel-wrap reveal">
+    <div class="carousel" id="carousel">
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#800404,#2a0101);"><span class="num">01</span></div>
+        <div class="c-body"><div class="c-title">Opening Lines</div><div class="c-desc">First impressions and fresh voices from every new SIIB batch.</div></div>
+      </div>
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#3a0505,#0a0a0a);"><span class="num">02</span></div>
+        <div class="c-body"><div class="c-title">Four Weeks Forward</div><div class="c-desc">A month-long series following student projects from idea to impact.</div></div>
+      </div>
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#5c0e1c,#111);"><span class="num">03</span></div>
+        <div class="c-body"><div class="c-title">Sunday Showcase</div><div class="c-desc">Weekly spotlight on standout work from across the SIIB community.</div></div>
+      </div>
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#800404,#c21c1c);"><span class="num">04</span></div>
+        <div class="c-body"><div class="c-title">Student Stories</div><div class="c-desc">Personal journeys of resilience, ambition, and growth on campus.</div></div>
+      </div>
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#222,#800404);"><span class="num">05</span></div>
+        <div class="c-body"><div class="c-title">Featured Faculty</div><div class="c-desc">Conversations with the educators shaping the SIIB curriculum.</div></div>
+      </div>
+      <div class="c-card">
+        <div class="c-media" style="background:linear-gradient(135deg,#340202,#800404);"><span class="num">06</span></div>
+        <div class="c-body"><div class="c-title">SIIB Unlocked</div><div class="c-desc">Behind-the-scenes access to life, culture, and traditions at SIIB.</div></div>
+      </div>
+    </div>
+    <div class="carousel-hint">Swipe to explore →</div>
+  </div>
+</section>
+
+<!-- COMMITTEE -->
+ <div class="faculty-card">
+
+    <div class="faculty-avatar">
+        <img src="assets/vandana.webp" alt="Dr.Vandana Mehta">
+    </div>
+
+    <div class="faculty-info">
+
+        <div class="faculty-label">
+            Faculty Coordinator
+        </div>
+
+        <h3>Dr. Vandana Mehta</h3>
+
+        <p>
+            Faculty Coordinator, PR & Media Committee
+        </p>
+
+        <div class="faculty-links">
+
+            <a href="#" aria-label="LinkedIn">
+                <!-- LinkedIn SVG -->
+            </a>
+
+            <a href="mailto:example@siib.ac.in" aria-label="Email">
+                <!-- Email SVG -->
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<section class="section" id="committee">
+  <div class="section-head reveal">
+    <div class="kicker">The People</div>
+    <h2 class="section-title">Meet the Committee</h2>
+    <p class="section-desc">The team behind every post, photo, and story.</p>
+  </div>
+  <div class="committee-grid reveal-stagger">
+    <div class="m-card">
+       <div class="m-avatar">
+        <img src="assets/krishnadutt.webp" alt="Krishnadutt Shrimali">
+    </div>
+      <div class="m-name">Krishnadutt Shrimali</div>
+      <div class="m-role">The Brand Alchemist</div>
+      <div class="m-links">
+        <a href="https://www.linkedin.com/in/krishnadutt-shrimali?utm_source=share_via&utm_content=profile&utm_medium=member_ios" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="mailto:krishnadutt.shrimali2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+    <div class="m-card">
+         <div class="m-avatar">
+        <img src="assets/omkar.webp" alt="Omkar Shelar">
+    </div>
+      
+      <div class="m-name">Omkar Shelar</div>
+      <div class="m-role">The Shot Maestro</div>
+      <div class="m-links">
+        <a href="https://www.linkedin.com/in/omkarshelar09/" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="mailto:omkar.shelar2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-avatar">
+        <img src="assets/Aditi.webp" alt="Aditi Verma">
+    </div>
+      <div class="m-name">Aditi Verma</div>
+      <div class="m-role">The Visual Voice</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+    <div class="m-card">
+      <div class="m-avatar">
+       <img src="assets/vartika.webp" alt="Vartika Srivatsav">
+      </div>
+      <div class="m-name">Vartika Srivatsav</div>
+      <div class="m-role">The Pixel Poet</div>
+      <div class="m-links">
+        <a href="https://www.linkedin.com/in/vartika-srivastava-17s/" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="mailto:vartika.srivastava2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+      <div class="m-card">
+      <div class="m-avatar">
+          <img src="assets/shubrajit.webp" alt="Shubhrajit Roy">
+      </div>
+      <div class="m-name">Shubhrajit Roy</div>
+      <div class="m-role">Master of Frames</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+ </div>
+      <div class="m-card">
+      <div class="m-avatar">
+          <img src="assets/sanchit.webp" alt="Sanchit Singh">
+      </div>
+      <div class="m-name">Sanchit Singh</div>
+      <div class="m-role">The Multitask Muse</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+ </div>
+      <div class="m-card">
+      <div class="m-avatar">
+          <img src="assets/sanidhya.webp" alt="Saanidhya Jugran">
+      </div>
+      <div class="m-name">Saanidhya Jugran</div>
+      <div class="m-role">The Story Weaver</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+</div>
+       <div class="m-card">
+      <div class="m-avatar">
+          <img src="assets/khushi.webp" alt="Khushi Zawar">
+      </div>
+      <div class="m-name">Khushi Zawar</div>
+      <div class="m-role">The Digital Voice</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+    
+     <div class="m-card">
+      <div class="m-avatar">
+              <img src="assets/aryaman.webp" alt="Aryaman Kashyap">
+      </div>
+      <div class="m-name">Aryaman Kashyap</div>
+      <div class="m-role">The Wordsmith</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+      <div class="m-card">
+      <div class="m-avatar">
+              <img src="assets/sara.webp" alt="Sarashree Joshi">
+      </div>
+      <div class="m-name">Sarashree Joshi</div>
+      <div class="m-role">The Creative Soul</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/purnendu.webp" alt="Purnendu Shekar">
+        </div>
+      <div class="m-name">Purnendu Shekar</div>
+      <div class="m-role">Shutter Maverick</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/yatee.webp" alt="Yatee Dodia">
+        </div>
+      <div class="m-name">Yatee Dodia</div>
+      <div class="m-role">The Tale Teller</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/riya.webp" alt="Riya Khandelwal">
+        </div>
+      <div class="m-name">Riya Khandelwal</div>
+      <div class="m-role">The Happy Canvas</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+              <img src="assets/aarya.webp" alt="Aarya Mandavgane">
+      </div>
+      <div class="m-name">Aarya Mandavgane</div>
+      <div class="m-role">The Creative Pulse</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/anushree.webp" alt="Anushree Rithe">
+        </div>
+      <div class="m-name">Anushree Rithe</div>
+      <div class="m-role">The Thought Painter</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/prajwal.webp" alt="Prajwal Lade">
+        </div>
+      <div class="m-name">Prajwal Lade</div>
+      <div class="m-role">The Reel Instinct</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/ujwal.webp" alt="Ujwal Raj K P">
+        </div>
+
+      <div class="m-name">Ujwal Raj K P</div>
+      <div class="m-role">The Off- Frame Artist</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+     <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/sakshi.webp" alt="Sakshi Lokhande">
+        </div>
+      <div class="m-name">Sakshi Lokhande</div>
+      <div class="m-role">The Ink Whisperer</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+     </div>
+
+        <div class="m-card">
+      <div class="m-avatar">
+                <img src="assets/ansh.webp" alt="Ansh Sachan">
+        </div>
+      <div class="m-name">Ansh Sachan</div>
+      <div class="m-role">The Visual Storyteller</div>
+      <div class="m-links">
+        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
+        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-head reveal">
+    <div class="kicker">Get in Touch</div>
+    <h2 class="section-title">Contact the Committee</h2>
+  </div>
+  <div class="contact-card reveal">
+    <div class="contact-list">
+      <div class="contact-row">
+        <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></div>
+        <div class="txt"><div class="k">Official Email</div><a class="v" href="mailto:pr@siib.ac.in">pr@siib.ac.in</a></div>
+      </div>
+      <div class="contact-row">
+        <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg></div>
+        <div class="txt"><div class="k">Instagram</div><a class="v" href="#" target="_blank">@siib.prmc</a></div>
+      </div>
+      <div class="contact-row">
+        <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></div>
+        <div class="txt"><div class="k">LinkedIn</div><a class="v" href="#" target="_blank">SIIB PR & Media Committee</a></div>
+      </div>
+      <div class="contact-row">
+        <div class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg></div>
+        <div class="txt"><div class="k">Website</div><a class="v" href="https://www.siib.ac.in" target="_blank">siib.ac.in</a></div>
+      </div>
+    </div>
+    <div class="map-panel">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#ffebeb" stroke-width="1.6"><path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>
+      <div class="loc-title">Symbiosis Institute of International Business</div>
+      <div class="loc-desc">Hinjawadi, Pune, Maharashtra — Symbiosis International (Deemed University)</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+<div class="foot-logo">
+    <img src="assets/logo.webp" alt="PRMC logo">
+    <span>PR &amp; Media Committee</span>
+</div>
+  <p>SYMBIOSIS INSTITUTE OF INTERNATIONAL BUSINESS · DESIGNED FOR THE SIIB ID CARD QR EXPERIENCE</p>
+</footer>
+
+<script>
+  // nav show/hide on scroll
+  const nav = document.getElementById('navWrap');
+  const hero = document.getElementById('hero');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.target === hero){
+        nav.classList.toggle('show', !e.isIntersecting);
+      } else {
+        if(e.isIntersecting) e.target.classList.add('in');
+      }
+    });
+  }, {threshold:0.15});
+  io.observe(hero);
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el=>io.observe(el));
+
+  // cursor glow (desktop only)
+  const glow = document.getElementById('cursorGlow');
+  if(window.matchMedia('(pointer:fine)').matches){
+    window.addEventListener('mousemove', (e)=>{
+      glow.style.opacity = 1;
+      glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
+    });
+    document.addEventListener('mouseleave', ()=> glow.style.opacity = 0);
+  }
+
+  // card spotlight hover
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mousemove', (e)=>{
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+</script>
+</body>
+</html>
