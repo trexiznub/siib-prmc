@@ -30,15 +30,23 @@
     --mono: 'IBM Plex Mono', monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
+html{
+    scroll-behavior:smooth;
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+body{
     background:var(--black);
     color:var(--white);
     font-family:var(--body);
+    width:100%;
+    max-width:100%;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
     cursor:default;
-  }
+}
   ::selection{background:var(--crimson);color:#fff;}
   a{color:inherit;text-decoration:none;}
   img{max-width:100%;display:block;}
@@ -208,6 +216,13 @@
   .reveal-stagger.in > *:nth-child(7){transition-delay:.39s;}
   .reveal-stagger.in > *:nth-child(8){transition-delay:.45s;}
   .reveal-stagger.in > *:nth-child(9){transition-delay:.51s;}
+  .reveal-stagger.in > *:nth-child(10){transition-delay:.57s;}
+.reveal-stagger.in > *:nth-child(11){transition-delay:.63s;}
+.reveal-stagger.in > *:nth-child(12){transition-delay:.69s;}
+.reveal-stagger.in > *:nth-child(13){transition-delay:.75s;}
+.reveal-stagger.in > *:nth-child(14){transition-delay:.81s;}
+.reveal-stagger.in > *:nth-child(15){transition-delay:.87s;}
+.reveal-stagger.in > *:nth-child(16){transition-delay:.93s;}
 
   /* ---------- section shell ---------- */
   .section{ padding:130px 24px; max-width:1180px; margin:0 auto; }
@@ -589,6 +604,219 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
   }
+
+  /* ================= MOBILE OPTIMIZATION ================= */
+
+@media(max-width:600px){
+
+  body{
+    overflow-x:hidden;
+  }
+
+  /* Hero section */
+  .hero{
+    padding:100px 20px 60px;
+    min-height:auto;
+  }
+
+  .seal-ring{
+    width:320px;
+    height:320px;
+  }
+
+  .seal-ring.inner{
+    width:260px;
+    height:260px;
+  }
+
+  .logo-halo{
+    width:120px;
+    height:120px;
+    margin-bottom:25px;
+  }
+
+  .hero-title{
+    font-size:2.4rem;
+    line-height:1.1;
+  }
+
+  .hero-sub{
+    font-size:0.95rem;
+    margin-top:18px;
+  }
+
+
+  /* Navigation */
+  .nav-wrap{
+    top:12px;
+    width:90%;
+    padding:8px 12px;
+  }
+
+  .nav-brand span{
+    font-size:10px;
+  }
+
+
+  /* Sections */
+  .section{
+    padding:70px 18px;
+  }
+
+  .section-head{
+    margin-bottom:35px;
+  }
+
+  .section-title{
+    font-size:1.8rem;
+  }
+
+
+  /* Social cards */
+  .bento{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .card,
+  .card.span2{
+    grid-column:span 1;
+    padding:22px;
+  }
+
+
+  /* About */
+  .about-grid{
+    grid-template-columns:1fr;
+    gap:30px;
+  }
+
+
+  /* Updates */
+  .updates-grid{
+    grid-template-columns:1fr;
+  }
+
+
+  /* Campaign cards */
+  .carousel{
+    gap:14px;
+  }
+
+  .c-card{
+    width:85vw;
+  }
+
+
+  /* ================= COMMITTEE ================= */
+
+  .committee-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+
+  .m-card{
+    padding:22px;
+  }
+
+
+  .m-avatar{
+    width:110px;
+    height:110px;
+  }
+
+
+  .m-name{
+    font-size:1.1rem;
+  }
+
+  .m-role{
+    font-size:10px;
+  }
+
+
+  /* Faculty coordinator */
+
+  .faculty-card{
+
+    flex-direction:column;
+    text-align:center;
+
+    padding:30px 20px;
+
+    gap:22px;
+
+    width:100%;
+  }
+
+
+  .faculty-avatar{
+
+    width:130px;
+    height:130px;
+
+  }
+
+
+  .faculty-info h3{
+
+    font-size:1.6rem;
+
+  }
+
+
+  .faculty-links{
+
+    justify-content:center;
+
+  }
+
+
+  /* Contact */
+
+  .contact-card{
+
+    padding:25px 18px;
+
+  }
+
+
+  .map-panel{
+
+    min-height:220px;
+
+  }
+
+
+  /* Footer */
+
+  footer{
+
+    padding:40px 20px 30px;
+
+  }
+  /* Mobile horizontal overflow protection */
+@media(max-width:600px){
+
+    *{
+        max-width:100%;
+    }
+
+    img{
+        max-width:100%;
+        height:auto;
+    }
+
+    .section,
+    .hero,
+    footer{
+        overflow:hidden;
+    }
+
+}
+
+}
 </style>
 </head>
 <body>
@@ -1119,15 +1347,19 @@
   // nav show/hide on scroll
   const nav = document.getElementById('navWrap');
   const hero = document.getElementById('hero');
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{
-      if(e.target === hero){
-        nav.classList.toggle('show', !e.isIntersecting);
-      } else {
-        if(e.isIntersecting) e.target.classList.add('in');
-      }
-    });
-  }, {threshold:0.15});
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.target === hero){
+      nav.classList.toggle('show', !e.isIntersecting);
+    }
+
+    if(e.isIntersecting){
+      e.target.classList.add('in');
+    }
+  });
+}, {
+  threshold:0.05
+});
   io.observe(hero);
   document.querySelectorAll('.reveal, .reveal-stagger').forEach(el=>io.observe(el));
 
