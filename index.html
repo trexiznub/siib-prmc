@@ -30,14 +30,13 @@
     --mono: 'IBM Plex Mono', monospace;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-html{
+  html{
     scroll-behavior:smooth;
     width:100%;
     max-width:100%;
     overflow-x:hidden;
-}
-
-body{
+  }
+  body{
     background:var(--black);
     color:var(--white);
     font-family:var(--body);
@@ -46,15 +45,14 @@ body{
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
     cursor:default;
-}
+  }
   ::selection{background:var(--crimson);color:#fff;}
   a{color:inherit;text-decoration:none;}
   img{max-width:100%;display:block;}
+  button{font:inherit;}
 
-  /* ---------- background layers ---------- */
-  .bg-fixed{
-    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
-  }
+  /* ================= BACKGROUND LAYERS ================= */
+  .bg-fixed{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
   .bg-grid{
     position:absolute; inset:-2px;
     background-image:
@@ -88,18 +86,36 @@ body{
     position:absolute; inset:0; opacity:.035; mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
-
-  /* cursor glow (desktop) */
   .cursor-glow{
     position:fixed; width:420px; height:420px; border-radius:50%;
     background: radial-gradient(circle, rgba(128,4,4,0.16) 0%, transparent 70%);
     pointer-events:none; z-index:1; transform:translate(-50%,-50%);
     transition: opacity .3s ease; opacity:0; will-change:transform;
   }
-
   section, header, footer{ position:relative; z-index:2; }
 
-  /* ---------- nav ---------- */
+  /* ================= LOADER ================= */
+  #loader{
+    position:fixed; inset:0; z-index:200; background:var(--black);
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .6s ease, visibility .6s ease;
+  }
+  #loader img{ width:64px; height:64px; animation: loaderPulse 1.1s ease-in-out infinite; }
+  @keyframes loaderPulse{ 0%,100%{opacity:.5; transform:scale(.92);} 50%{opacity:1; transform:scale(1);} }
+  #loader.hide{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  /* ================= SCROLL PROGRESS ================= */
+  .scroll-progress{
+    position:fixed; top:0; left:0; height:3px; width:100%; z-index:100;
+    background:transparent; transform-origin:left;
+  }
+  .scroll-progress::after{
+    content:''; display:block; height:100%; width:100%;
+    background:linear-gradient(90deg, var(--crimson), var(--crimson-bright), var(--rose));
+    transform:scaleX(var(--p, 0)); transform-origin:left; transition:transform .1s linear;
+  }
+
+  /* ================= NAV ================= */
   .nav-wrap{
     position:fixed; top:20px; left:50%; transform:translate(-50%,-90px);
     z-index:50; display:flex; align-items:center; gap:6px;
@@ -111,6 +127,7 @@ body{
     -webkit-backdrop-filter: blur(20px) saturate(140%);
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
     transition: transform .6s cubic-bezier(.16,1,.3,1);
+    max-width:94vw;
   }
   .nav-wrap.show{ transform:translate(-50%,0); }
   .nav-brand{ display:flex; align-items:center; gap:8px; padding-right:10px; border-right:1px solid var(--line); margin-right:4px;}
@@ -118,14 +135,18 @@ body{
   .nav-brand span{ font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--gray); white-space:nowrap;}
   .nav-links{ display:flex; gap:2px; }
   .nav-links a{
-    font-size:13px; padding:8px 14px; border-radius:100px; color:var(--gray);
-    transition: color .25s ease, background .25s ease;
-    white-space:nowrap;
+    position:relative; font-size:13px; padding:8px 14px; border-radius:100px; color:var(--gray);
+    transition: color .25s ease, background .25s ease; white-space:nowrap;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:14px; right:14px; bottom:4px; height:1px;
+    background:var(--crimson-bright); transform:scaleX(0); transform-origin:left; transition:transform .3s ease;
   }
   .nav-links a:hover{ color:var(--white); background:rgba(255,255,255,0.06); }
+  .nav-links a:hover::after{ transform:scaleX(1); }
   @media (max-width: 860px){ .nav-links{display:none;} }
 
-  /* ---------- hero ---------- */
+  /* ================= HERO ================= */
   .hero{
     min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:120px 24px 80px; position:relative;
@@ -159,7 +180,8 @@ body{
     color:var(--gray); margin-bottom:22px; display:flex; align-items:center; gap:10px;
     opacity:0; animation: rise .8s .1s cubic-bezier(.16,1,.3,1) forwards;
   }
-  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--crimson-bright); box-shadow:0 0 12px var(--crimson-bright); }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--crimson-bright); box-shadow:0 0 12px var(--crimson-bright); animation: dotBlink 2.4s ease-in-out infinite; }
+  @keyframes dotBlink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
 
   h1.hero-title{
     font-family:var(--disp); font-weight:600; letter-spacing:-0.03em; line-height:1.02;
@@ -170,7 +192,9 @@ body{
   h1.hero-title .accent{
     background: linear-gradient(120deg, var(--rose) 0%, var(--crimson-bright) 55%, var(--crimson) 100%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
+    background-size:200% auto; animation: shine 6s ease-in-out infinite;
   }
+  @keyframes shine{ 0%,100%{background-position:0% center;} 50%{background-position:100% center;} }
   .hero-sub{
     margin-top:26px; font-size:clamp(1rem,2vw,1.25rem); color:var(--gray); font-weight:300;
     max-width:520px; line-height:1.6;
@@ -180,7 +204,7 @@ body{
   @keyframes rise{ from{ opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
 
   .hero-cta{
-    margin-top:44px; display:flex; gap:14px; align-items:center;
+    margin-top:44px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; justify-content:center;
     opacity:0; animation: rise .9s .5s cubic-bezier(.16,1,.3,1) forwards;
   }
   .btn{
@@ -202,29 +226,31 @@ body{
   .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gray-dim), transparent); animation: scrolldown 2s ease-in-out infinite; }
   @keyframes scrolldown{ 0%{opacity:0; transform:scaleY(0.2); transform-origin:top;} 40%{opacity:1; transform:scaleY(1); transform-origin:top;} 100%{opacity:0; transform:scaleY(0.2); transform-origin:bottom;} }
 
-  /* ---------- reveal ---------- */
+  /* ================= TICKER ================= */
+  .ticker{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--panel); overflow:hidden; padding:16px 0;
+  }
+  .ticker-track{ display:flex; width:max-content; animation:tickerScroll 28s linear infinite; }
+  .ticker-track span{
+    font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray);
+    padding:0 22px; display:flex; align-items:center; gap:22px; white-space:nowrap;
+  }
+  .ticker-track span::after{ content:'✦'; color:var(--crimson-bright); font-size:10px; }
+  @keyframes tickerScroll{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .ticker-track{animation:none;} }
+
+  /* ================= REVEAL ================= */
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }
   .reveal.in{ opacity:1; transform:translateY(0); }
-  .reveal-stagger > *{ opacity:0; transform:translateY(24px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal-stagger > *{
+    opacity:0; transform:translateY(24px);
+    transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+    transition-delay: calc(var(--i, 0) * 70ms);
+  }
   .reveal-stagger.in > *{ opacity:1; transform:translateY(0); }
-  .reveal-stagger.in > *:nth-child(1){transition-delay:.03s;}
-  .reveal-stagger.in > *:nth-child(2){transition-delay:.09s;}
-  .reveal-stagger.in > *:nth-child(3){transition-delay:.15s;}
-  .reveal-stagger.in > *:nth-child(4){transition-delay:.21s;}
-  .reveal-stagger.in > *:nth-child(5){transition-delay:.27s;}
-  .reveal-stagger.in > *:nth-child(6){transition-delay:.33s;}
-  .reveal-stagger.in > *:nth-child(7){transition-delay:.39s;}
-  .reveal-stagger.in > *:nth-child(8){transition-delay:.45s;}
-  .reveal-stagger.in > *:nth-child(9){transition-delay:.51s;}
-  .reveal-stagger.in > *:nth-child(10){transition-delay:.57s;}
-.reveal-stagger.in > *:nth-child(11){transition-delay:.63s;}
-.reveal-stagger.in > *:nth-child(12){transition-delay:.69s;}
-.reveal-stagger.in > *:nth-child(13){transition-delay:.75s;}
-.reveal-stagger.in > *:nth-child(14){transition-delay:.81s;}
-.reveal-stagger.in > *:nth-child(15){transition-delay:.87s;}
-.reveal-stagger.in > *:nth-child(16){transition-delay:.93s;}
 
-  /* ---------- section shell ---------- */
+  /* ================= SECTION SHELL ================= */
   .section{ padding:130px 24px; max-width:1180px; margin:0 auto; }
   .section-head{ margin-bottom:56px; }
   .kicker{
@@ -232,22 +258,24 @@ body{
     display:flex; align-items:center; gap:10px; margin-bottom:16px;
   }
   .kicker::before{ content:''; width:22px; height:1px; background:var(--crimson-bright); }
+  .kicker .num{ color:var(--gray-dim); }
   .section-title{
     font-family:var(--disp); font-weight:600; letter-spacing:-0.02em; font-size:clamp(1.8rem,3.6vw,2.7rem);
   }
   .section-desc{ margin-top:16px; color:var(--gray); max-width:560px; font-weight:300; line-height:1.7; font-size:1.02rem;}
 
-  /* ---------- about ---------- */
+  /* ================= ABOUT ================= */
   .about-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap:60px; align-items:start; }
   @media(max-width:860px){ .about-grid{grid-template-columns:1fr; gap:36px;} }
   .about-copy p{ color:var(--gray); font-weight:300; line-height:1.85; font-size:1.05rem; margin-bottom:18px; }
   .about-copy strong{ color:var(--white); font-weight:500; }
   .stat-stack{ display:flex; flex-direction:column; gap:1px; background:var(--line); border-radius:var(--radius); overflow:hidden; border:1px solid var(--line);}
-  .stat-row{ background:var(--panel); padding:26px 28px; display:flex; justify-content:space-between; align-items:center; gap:20px;}
+  .stat-row{ background:var(--panel); padding:26px 28px; display:flex; justify-content:space-between; align-items:center; gap:20px; transition:background .3s ease;}
+  .stat-row:hover{ background:var(--panel-2); }
   .stat-row .label{ font-family:var(--mono); font-size:12px; letter-spacing:.06em; color:var(--gray); text-transform:uppercase;}
   .stat-row .val{ font-family:var(--disp); font-size:1.1rem; font-weight:600; color:var(--white); text-align:right;}
 
-  /* ---------- bento social grid ---------- */
+  /* ================= BENTO SOCIAL GRID ================= */
   .bento{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
   @media(max-width:900px){ .bento{grid-template-columns:repeat(2,1fr);} }
   @media(max-width:520px){ .bento{grid-template-columns:1fr;} }
@@ -282,7 +310,7 @@ body{
   .plat-link svg{ transition:transform .3s ease; }
   .plat-link:hover svg{ transform:translateX(2px); }
 
-  /* ---------- updates ---------- */
+  /* ================= UPDATES ================= */
   .updates-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
   @media(max-width:900px){ .updates-grid{grid-template-columns:1fr;} }
   .u-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px; transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease;}
@@ -292,8 +320,8 @@ body{
   .u-desc{ color:var(--gray); font-size:.88rem; font-weight:300; line-height:1.65; margin-bottom:20px;}
   .u-date{ font-family:var(--mono); font-size:11px; color:var(--gray-dim); letter-spacing:.05em; }
 
-  /* ---------- campaigns carousel ---------- */
-  .carousel-wrap{ position:relative; margin:0 -24px; padding:0 24px; }
+  /* ================= CAMPAIGNS CAROUSEL ================= */
+  .carousel-wrap{ position:relative; width:100%; margin:0; padding:0; overflow:hidden; }
   .carousel{
     display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; padding:6px 0 22px;
     scrollbar-width:none;
@@ -311,258 +339,74 @@ body{
   .c-body{ padding:22px 22px 26px; }
   .c-title{ font-family:var(--disp); font-weight:600; font-size:1.12rem; margin-bottom:8px;}
   .c-desc{ color:var(--gray); font-size:.87rem; font-weight:300; line-height:1.6; }
-  .carousel-hint{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-dim); text-align:right; margin-top:2px;}
+  .carousel-footer{ display:flex; align-items:center; justify-content:space-between; margin-top:2px; }
+  .carousel-hint{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-dim); }
+  .carousel-dots{ display:flex; gap:6px; }
+  .carousel-dots span{ width:6px; height:6px; border-radius:50%; background:var(--line-bright); transition:background .3s ease, transform .3s ease; }
+  .carousel-dots span.active{ background:var(--crimson-bright); transform:scale(1.3); }
 
-  /* ---------- committee ---------- */
+  /* ================= COMMITTEE ================= */
+  .sub-label{
+    font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--gray-dim);
+    margin:56px 0 22px; display:flex; align-items:center; gap:10px;
+  }
+  .sub-label::after{ content:''; flex:1; height:1px; background:var(--line); }
   .committee-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
   @media(max-width:900px){ .committee-grid{grid-template-columns:repeat(2,1fr);} }
- 
+  @media(max-width:600px){ .committee-grid{grid-template-columns:1fr;} }
   .m-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:26px; text-align:center; transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s ease;}
   .m-card:hover{ transform:translateY(-5px); border-color:var(--line-bright);}
-.m-avatar{
-    width:90px;
-    height:90px;
-    margin:0 auto 18px;
-    border-radius:50%;
-    overflow:hidden;
-    border:3px solid rgba(255,255,255,.08);
-    box-shadow:0 10px 30px rgba(0,0,0,.4);
-}
-.m-avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    transition:.4s;
-}
-.m-card:hover .m-avatar img{
-    transform:scale(1.08);
-}
+  .m-avatar{
+    width:90px; height:90px; margin:0 auto 18px; border-radius:50%; overflow:hidden;
+    border:3px solid rgba(255,255,255,.08); box-shadow:0 10px 30px rgba(0,0,0,.4);
+    transition: border-color .4s ease, box-shadow .4s ease;
+  }
+  .m-card:hover .m-avatar{ border-color:rgba(194,28,28,.5); box-shadow:0 10px 34px rgba(128,4,4,.4); }
+  .m-avatar img{ width:100%; height:100%; object-fit:cover; transition:transform .5s cubic-bezier(.16,1,.3,1); }
+  .m-card:hover .m-avatar img{ transform:scale(1.08) rotate(1.5deg); }
   .m-name{ font-family:var(--disp); font-weight:600; font-size:1.02rem; margin-bottom:4px;}
   .m-role{ font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--gray); margin-bottom:18px;}
   .m-links{ display:flex; justify-content:center; gap:10px;}
   .m-links a{ width:34px; height:34px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--gray); transition: all .3s ease;}
-  .m-links a:hover{ background:var(--crimson); border-color:var(--crimson); color:#fff; }
-.faculty-card{
-    max-width:650px;
-    margin:0 auto 70px;
-    padding:40px;
-
-    display:flex;
-    align-items:center;
-    gap:32px;
-
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:28px;
-
-    transition:.4s ease;
-
-    position:relative;
-    overflow:hidden;
-}
-
-.faculty-card:hover{
-    transform:translateY(-6px);
-    border-color:var(--line-bright);
-}
-
-.faculty-card::before{
-    content:"";
-    position:absolute;
-    inset:0;
-
-    background:radial-gradient(
-        circle at top right,
-        rgba(194,28,28,.15),
-        transparent 60%
-    );
-
-    pointer-events:none;
-}
-
-.faculty-avatar{
-    width:160px;
-    height:160px;
-
-    flex-shrink:0;
-
-    border-radius:50%;
-    overflow:hidden;
-
-    border:4px solid rgba(255,255,255,.08);
-
-    box-shadow:0 20px 40px rgba(0,0,0,.4);
-}
-
-.faculty-avatar img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.faculty-info{
-    flex:1;
-}
-
-.faculty-label{
-    display:inline-block;
-
-    padding:8px 18px;
-
-    margin-bottom:18px;
-
-    border-radius:999px;
-
-    background:rgba(194,28,28,.12);
-
-    color:#ffb4b4;
-
-    border:1px solid rgba(194,28,28,.35);
-
-    font-family:var(--mono);
-
-    font-size:11px;
-
-    letter-spacing:.12em;
-
-    text-transform:uppercase;
-}
-
-.faculty-info h3{
-    font-family:var(--disp);
-    font-size:2rem;
-    margin-bottom:10px;
-}
-
-.faculty-info p{
-    color:var(--gray);
-    line-height:1.7;
-    margin-bottom:22px;
-}
-.faculty-links{
-    display:flex;
-    gap:14px;
-    margin-top:25px;
-}
-
-.faculty-links a{
-
-    width:48px;
-    height:48px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    border-radius:50%;
-
-    border:1px solid rgba(255,255,255,.08);
-
-    background:rgba(255,255,255,.03);
-
-    color:white;
-
-    transition:all .35s ease;
-}
-
-.faculty-links a svg{
-    width:20px;
-    height:20px;
-}
-
-.faculty-links a:hover{
-
-    background:linear-gradient(
-        135deg,
-        var(--crimson-bright),
-        var(--crimson)
-    );
-
-    transform:translateY(-3px);
-
-    box-shadow:0 10px 30px rgba(128,4,4,.35);
-
-    border-color:transparent;
-}
-
-/* ---------- Mobile Responsive Fixes ---------- */
-
-
-
-  /* Committee cards */
-
-
-  .m-card{
-    padding:28px 20px;
-    border-radius:20px;
-  }
-
-  .m-avatar{
-    width:95px;
-    height:95px;
-  }
-
-  .m-name{
-    font-size:1.05rem;
-  }
-
-  .m-role{
-    font-size:10px;
-    line-height:1.6;
-    max-width:250px;
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  .m-links a{
-    width:38px;
-    height:38px;
-  }
-
-
-  /* Faculty Coordinator Card */
+  .m-links a:hover{ background:var(--crimson); border-color:var(--crimson); color:#fff; transform:translateY(-2px); }
 
   .faculty-card{
-    width:100%;
-    max-width:100%;
-    margin:0 auto 50px;
-
-    padding:32px 20px;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-
-    gap:20px;
-
-    border-radius:24px;
+    max-width:650px; margin:0 auto 20px; padding:40px;
+    display:flex; align-items:center; gap:32px;
+    background:var(--panel); border:1px solid var(--line); border-radius:28px;
+    transition:.4s ease; position:relative; overflow:hidden;
   }
-
-
+  .faculty-card:hover{ transform:translateY(-6px); border-color:var(--line-bright); }
+  .faculty-card::before{
+    content:""; position:absolute; inset:0;
+    background:radial-gradient(circle at top right, rgba(194,28,28,.15), transparent 60%);
+    pointer-events:none;
+  }
   .faculty-avatar{
-    width:130px;
-    height:130px;
+    width:160px; height:160px; flex-shrink:0; border-radius:50%; overflow:hidden;
+    border:4px solid rgba(255,255,255,.08); box-shadow:0 20px 40px rgba(0,0,0,.4);
+  }
+  .faculty-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .faculty-info{ flex:1; }
+  .faculty-label{
+    display:inline-block; padding:8px 18px; margin-bottom:18px; border-radius:999px;
+    background:rgba(194,28,28,.12); color:#ffb4b4; border:1px solid rgba(194,28,28,.35);
+    font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  }
+  .faculty-info h3{ font-family:var(--disp); font-size:2rem; margin-bottom:10px; }
+  .faculty-info p{ color:var(--gray); line-height:1.7; margin-bottom:22px; }
+  .faculty-links{ display:flex; gap:14px; margin-top:25px; }
+  .faculty-links a{
+    width:48px; height:48px; display:flex; justify-content:center; align-items:center; border-radius:50%;
+    border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:white; transition:all .35s ease;
+  }
+  .faculty-links a svg{ width:20px; height:20px; }
+  .faculty-links a:hover{
+    background:linear-gradient(135deg, var(--crimson-bright), var(--crimson));
+    transform:translateY(-3px); box-shadow:0 10px 30px rgba(128,4,4,.35); border-color:transparent;
   }
 
-
-  .faculty-info h3{
-    font-size:1.6rem;
-  }
-
-
-  .faculty-info p{
-    font-size:.95rem;
-  }
-
-
-  .faculty-links{
-    justify-content:center;
-    margin-top:20px;
-  }
-
-}
-  /* ---------- contact ---------- */
+  /* ================= CONTACT ================= */
   .contact-card{
     background: linear-gradient(160deg, var(--panel) 0%, #0d0d0d 100%);
     border:1px solid var(--line); border-radius:28px; padding:56px;
@@ -574,7 +418,8 @@ body{
     background:radial-gradient(circle, rgba(128,4,4,0.35), transparent 70%); filter:blur(10px);
   }
   .contact-list{ display:flex; flex-direction:column; gap:0; position:relative; z-index:2;}
-  .contact-row{ display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line);}
+  .contact-row{ display:flex; align-items:center; gap:16px; padding:18px 0; border-bottom:1px solid var(--line); transition:transform .3s ease;}
+  .contact-row:hover{ transform:translateX(4px); }
   .contact-row:last-child{ border-bottom:none; }
   .contact-row .ic{ width:40px; height:40px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--rose); flex-shrink:0;}
   .contact-row .txt .k{ font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-dim); margin-bottom:3px;}
@@ -584,221 +429,79 @@ body{
     position:relative; z-index:2; border-radius:18px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
     display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 24px; min-height:260px;
   }
-  .map-panel svg{ margin-bottom:18px; }
+  .map-panel svg{ margin-bottom:18px; animation:pinDrop 3s ease-in-out infinite; }
+  @keyframes pinDrop{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
   .map-panel .loc-title{ font-family:var(--disp); font-weight:600; font-size:1.15rem; margin-bottom:8px;}
   .map-panel .loc-desc{ color:var(--gray); font-size:.85rem; font-weight:300; line-height:1.6; max-width:260px;}
 
-  /* ---------- footer ---------- */
+  /* ================= BACK TO TOP ================= */
+  .to-top{
+    position:fixed; right:22px; bottom:22px; z-index:60; width:46px; height:46px; border-radius:50%;
+    background:rgba(17,17,17,0.7); border:1px solid var(--line-bright); backdrop-filter:blur(14px);
+    display:flex; align-items:center; justify-content:center; color:var(--white); cursor:pointer;
+    opacity:0; transform:translateY(12px); pointer-events:none; transition:all .35s cubic-bezier(.16,1,.3,1);
+  }
+  .to-top.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  .to-top:hover{ background:var(--crimson); border-color:var(--crimson); transform:translateY(-3px); }
+
+  /* ================= FOOTER ================= */
   footer{ padding:60px 24px 40px; text-align:center; border-top:1px solid var(--line); margin-top:40px;}
   .foot-logo{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px;}
   .foot-logo img{ width:26px; height:26px; }
   .foot-logo span{ font-family:var(--disp); font-weight:600; font-size:1rem; }
   footer p{ font-family:var(--mono); font-size:11px; color:var(--gray-dim); letter-spacing:.05em; }
 
-  /* utility */
-  .center-note{ text-align:center; }
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
   }
 
-  /* ================= MOBILE OPTIMIZATION ================= */
-
-@media(max-width:600px){
-
-.committee-grid{
-    grid-template-columns:1fr;
-    gap:18px;
-    width:100%;
-}
-
-.m-card{
-    width:100%;
-}
-
-}
-
-  /* Navigation */
-  .nav-wrap{
-    top:12px;
-    width:90%;
-    padding:8px 12px;
-  }
-
-  .nav-brand span{
-    font-size:10px;
-  }
-
-
-  /* Sections */
-  .section{
-    padding:70px 18px;
-  }
-
-  .section-head{
-    margin-bottom:35px;
-  }
-
-  .section-title{
-    font-size:1.8rem;
-  }
-
-
-  /* Social cards */
-  .bento{
-    grid-template-columns:1fr;
-    gap:14px;
-  }
-
-  .card,
-  .card.span2{
-    grid-column:span 1;
-    padding:22px;
-  }
-
-
-  /* About */
-  .about-grid{
-    grid-template-columns:1fr;
-    gap:30px;
-  }
-
-
-  /* Updates */
-  .updates-grid{
-    grid-template-columns:1fr;
-  }
-
-
-  /* Campaign cards */
-  .carousel{
-    gap:14px;
-  }
-
-  .c-card{
-    width:85vw;
-  }
-
-
-  /* ================= COMMITTEE ================= */
-
-  .committee-grid{
-    grid-template-columns:1fr;
-    gap:18px;
-  }
-
-
-  .m-card{
-    padding:22px;
-  }
-
-
-  .m-avatar{
-    width:110px;
-    height:110px;
-  }
-
-
-  .m-name{
-    font-size:1.1rem;
-  }
-
-  .m-role{
-    font-size:10px;
-  }
-
-
-  /* Faculty coordinator */
-
-  .faculty-card{
-
-    flex-direction:column;
-    text-align:center;
-
-    padding:30px 20px;
-
-    gap:22px;
-
-    width:100%;
-  }
-
-
-  .faculty-avatar{
-
-    width:130px;
-    height:130px;
-
-  }
-
-
-  .faculty-info h3{
-
-    font-size:1.6rem;
-
-  }
-
-
-  .faculty-links{
-
-    justify-content:center;
-
-  }
-
-
-  /* Contact */
-
-  .contact-card{
-
-    padding:25px 18px;
-
-  }
-
-
-  .map-panel{
-
-    min-height:220px;
-
-  }
-
-
-  /* Footer */
-
-  footer{
-
-    padding:40px 20px 30px;
-
-  }
-  /* Mobile horizontal overflow protection */
-@media(max-width:600px){
-
-    *{
-        max-width:100%;
+  /* ================= MOBILE (single consolidated breakpoint) ================= */
+  @media(max-width:600px){
+    *{ max-width:100%; }
+    img{ max-width:100%; height:auto; }
+    .section, .hero, footer{ overflow:hidden; }
+
+    .nav-wrap{ top:12px; padding:8px 12px; }
+    .nav-brand span{ font-size:10px; }
+
+    .section{ padding:70px 18px; }
+    .section-head{ margin-bottom:35px; }
+    .section-title{ font-size:1.8rem; }
+
+    .bento{ grid-template-columns:1fr; gap:14px; }
+    .card, .card.span2{ grid-column:span 1; padding:22px; }
+
+    .about-grid{ grid-template-columns:1fr; gap:30px; }
+    .updates-grid{ grid-template-columns:1fr; }
+
+    .carousel{ gap:14px; }
+    .c-card{ width:85vw; }
+
+    .committee-grid{ grid-template-columns:1fr; gap:18px; }
+    .m-card{ padding:24px 20px; border-radius:20px; }
+    .m-avatar{ width:100px; height:100px; }
+    .m-name{ font-size:1.08rem; }
+    .m-role{ font-size:10px; max-width:250px; margin:0 auto 18px; }
+    .m-links a{ width:38px; height:38px; }
+
+    .faculty-card{
+      flex-direction:column; text-align:center; padding:30px 20px; gap:22px; width:100%; border-radius:24px;
     }
+    .faculty-avatar{ width:130px; height:130px; }
+    .faculty-info h3{ font-size:1.6rem; }
+    .faculty-links{ justify-content:center; }
 
-    img{
-        max-width:100%;
-        height:auto;
-    }
+    .contact-card{ padding:25px 18px; }
+    .map-panel{ min-height:220px; }
 
-    .section,
-    .hero,
-    footer{
-        overflow:hidden;
-    }
-
-}
-@media(max-width:600px){
-
-  .committee-grid.reveal-stagger > *{
-      opacity:1;
-      transform:none;
+    footer{ padding:40px 20px 30px; }
   }
-
-}
-
-}
 </style>
 </head>
 <body>
+
+<div id="loader"><img src="assets/logo.webp" alt="Loading"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
 
 <div class="bg-fixed">
   <div class="bg-glow"></div>
@@ -811,7 +514,7 @@ body{
 <!-- NAV -->
 <nav class="nav-wrap" id="navWrap">
   <div class="nav-brand">
-  <img src="assets/logo.webp" alt="PRMC logo">
+    <img src="assets/logo.webp" alt="PRMC logo">
     <span>PRMC · SIIB</span>
   </div>
   <div class="nav-links">
@@ -830,7 +533,7 @@ body{
   <div class="seal-ring inner"></div>
 
   <div class="logo-halo">
-<img src="assets/logo.webp" alt="PRMC Logo">
+    <img src="assets/logo.webp" alt="PRMC Logo">
   </div>
 
   <div class="eyebrow"><span class="dot"></span> SIIB · Symbiosis Institute of International Business</div>
@@ -850,96 +553,26 @@ body{
   <div class="scroll-cue"><span class="line"></span>Scroll</div>
 </header>
 
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
 <!-- PLATFORMS -->
 <section class="section" id="platforms">
   <div class="section-head reveal">
-    <div class="kicker">The Media Hub</div>
+    <div class="kicker"><span class="num">01</span>The Media Hub</div>
     <h2 class="section-title">Follow Us Everywhere</h2>
     <p class="section-desc">Every official PR & Media channel of SIIB, in one place. Pick a platform and stay in the loop.</p>
   </div>
-
-  <div class="bento reveal-stagger">
-    <div class="card span2">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
-      </div>
-      <div class="plat-name">Instagram</div>
-      <div class="plat-desc">Campus moments, event reels, and behind-the-scenes stories from SIIB — posted daily.</div>
-      <a class="plat-link" href="https://www.instagram.com/siib.pune/?hl=en" target="_blank">Follow @siib.pune <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg>
-      </div>
-      <div class="plat-name">LinkedIn</div>
-      <div class="plat-desc">Achievements, placements, and institute announcements for the professional network.</div>
-      <a class="plat-link" href="https://www.linkedin.com/school/symbiosis-institute-of-international-business/posts/?feedView=all" target="_blank">Connect <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <div class="plat-name">YouTube</div>
-      <div class="plat-desc">Event recaps, interviews, and the full SIIB Unlocked series.</div>
-      <a class="plat-link" href="https://www.youtube.com/@OfficialSIIB" target="_blank">Subscribe <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 3h-3a4 4 0 0 0-4 4v3H8v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-      </div>
-      <div class="plat-name">Facebook</div>
-      <div class="plat-desc">Institute news, alumni highlights, and community updates.</div>
-      <a class="plat-link" href="https://www.facebook.com/SymbiosisInstituteOfInternationalBusiness/" target="_blank">Like Page <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l7.5 8.5L4.5 20H7l6-6.8L18 20h2l-8-9L19.5 4H17l-5.5 6.2L7 4z"/></svg>
-      </div>
-      <div class="plat-name">X</div>
-      <div class="plat-desc">Real-time updates, quick announcements, and campus commentary.</div>
-      <a class="plat-link" href="https://x.com/SIIBTweets" target="_blank">Follow <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-   
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M8.5 8.7c.2-.5.7-.5 1-.5s.5 0 .7.5c.2.5.6 1.4.6 1.5s0 .3-.2.5c-.2.3-.4.4-.6.6-.2.2-.3.4-.1.7.2.4 1 1.6 2.1 2.2 1.5.9 1.6.6 1.9.6.3-.1.9-.7 1.1-1 .2-.3.4-.2.7-.1.3.1 1.7.8 2 1 .3.1.5.2.5.4 0 .2 0 1-.4 1.5-.4.5-1.7 1.2-2.7.9-1-.3-2.8-1-4.4-2.6-1.6-1.6-2.1-2.9-2.3-3.4-.2-.5-.2-1.2.1-1.6z" fill="currentColor" stroke="none"/></svg>
-      </div>
-      <div class="plat-name">WhatsApp</div>
-      <div class="plat-desc">Join our channel for the fastest campus-wide announcements.</div>
-      <a class="plat-link" href="#" target="_blank">Join Channel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>
-      </div>
-      <div class="plat-name">Email</div>
-      <div class="plat-desc">For media queries, collaborations, and press inquiries.</div>
-      <a class="plat-link" href="mailto:pr@siib.ac.in">pr@siib.ac.in <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-
-    <div class="card">
-      <div class="plat-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>
-      </div>
-      <div class="plat-name">Website</div>
-      <div class="plat-desc">The full SIIB institute website — programmes, admissions, and more.</div>
-      <a class="plat-link" href="https://www.siib.ac.in" target="_blank">siib.ac.in <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
-    </div>
-  </div>
+  <div class="bento reveal-stagger" id="platformsGrid"></div>
 </section>
 
 <!-- ABOUT -->
 <section class="section" id="about">
   <div class="about-grid">
     <div class="reveal">
-      <div class="kicker">Who We Are</div>
+      <div class="kicker"><span class="num">02</span>Who We Are</div>
       <h2 class="section-title" style="margin-bottom:26px;">The voice of SIIB, out in the open.</h2>
       <div class="about-copy">
         <p>The <strong>Public Relations & Media Committee</strong> is the storytelling engine of Symbiosis Institute of International Business. We capture campus life, cover institute events, and carry the achievements of students and faculty to the world.</p>
@@ -960,331 +593,47 @@ body{
 <!-- UPDATES -->
 <section class="section" id="updates">
   <div class="section-head reveal">
-    <div class="kicker">On Campus Now</div>
+    <div class="kicker"><span class="num">03</span>On Campus Now</div>
     <h2 class="section-title">Latest From the Committee</h2>
     <p class="section-desc">Events, campaigns, achievements, and announcements — refreshed as things happen.</p>
   </div>
-  <div class="updates-grid reveal-stagger">
-    <div class="u-card">
-      <span class="u-tag">Event</span>
-      <div class="u-title">Orientation Week Coverage Live</div>
-      <div class="u-desc">Full photo and video coverage of the new batch's orientation, now live across all channels.</div>
-      <div class="u-date">Aug 2026</div>
-    </div>
-    <div class="u-card">
-      <span class="u-tag">Campaign</span>
-      <div class="u-title">Opening Lines — Season 3</div>
-      <div class="u-desc">A new season of first-impression stories from the incoming SIIB batch.</div>
-      <div class="u-date">Aug 2026</div>
-    </div>
-    <div class="u-card">
-      <span class="u-tag">Achievement</span>
-      <div class="u-title">SIIB Recognised at National PR Summit</div>
-      <div class="u-desc">The committee's work was featured for its campus storytelling approach.</div>
-      <div class="u-date">Jul 2026</div>
-    </div>
-  </div>
+  <div class="updates-grid reveal-stagger" id="updatesGrid"></div>
 </section>
 
 <!-- CAMPAIGNS -->
 <section class="section" id="campaigns">
   <div class="section-head reveal">
-    <div class="kicker">Featured Work</div>
+    <div class="kicker"><span class="num">04</span>Featured Work</div>
     <h2 class="section-title">Campaigns We're Proud Of</h2>
     <p class="section-desc">A running archive of the committee's flagship content series.</p>
   </div>
   <div class="carousel-wrap reveal">
-    <div class="carousel" id="carousel">
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#800404,#2a0101);"><span class="num">01</span></div>
-        <div class="c-body"><div class="c-title">Opening Lines</div><div class="c-desc">First impressions and fresh voices from every new SIIB batch.</div></div>
-      </div>
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#3a0505,#0a0a0a);"><span class="num">02</span></div>
-        <div class="c-body"><div class="c-title">Four Weeks Forward</div><div class="c-desc">A month-long series following student projects from idea to impact.</div></div>
-      </div>
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#5c0e1c,#111);"><span class="num">03</span></div>
-        <div class="c-body"><div class="c-title">Sunday Showcase</div><div class="c-desc">Weekly spotlight on standout work from across the SIIB community.</div></div>
-      </div>
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#800404,#c21c1c);"><span class="num">04</span></div>
-        <div class="c-body"><div class="c-title">Student Stories</div><div class="c-desc">Personal journeys of resilience, ambition, and growth on campus.</div></div>
-      </div>
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#222,#800404);"><span class="num">05</span></div>
-        <div class="c-body"><div class="c-title">Featured Faculty</div><div class="c-desc">Conversations with the educators shaping the SIIB curriculum.</div></div>
-      </div>
-      <div class="c-card">
-        <div class="c-media" style="background:linear-gradient(135deg,#340202,#800404);"><span class="num">06</span></div>
-        <div class="c-body"><div class="c-title">SIIB Unlocked</div><div class="c-desc">Behind-the-scenes access to life, culture, and traditions at SIIB.</div></div>
-      </div>
+    <div class="carousel" id="carousel"></div>
+    <div class="carousel-footer">
+      <div class="carousel-hint">Swipe to explore →</div>
+      <div class="carousel-dots" id="carouselDots"></div>
     </div>
-    <div class="carousel-hint">Swipe to explore →</div>
   </div>
 </section>
 
 <!-- COMMITTEE -->
- <div class="faculty-card">
-
-    <div class="faculty-avatar">
-        <img src="assets/vandana.webp" alt="Dr.Vandana Mehta">
-    </div>
-
-    <div class="faculty-info">
-
-        <div class="faculty-label">
-            Faculty Coordinator
-        </div>
-
-        <h3>Dr. Vandana Mehta</h3>
-
-        <p>
-            Faculty Coordinator, PR & Media Committee
-        </p>
-
-        <div class="faculty-links">
-
-            <a href="#" aria-label="LinkedIn">
-                <!-- LinkedIn SVG -->
-            </a>
-
-            <a href="mailto:example@siib.ac.in" aria-label="Email">
-                <!-- Email SVG -->
-            </a>
-
-        </div>
-
-    </div>
-
-</div>
 <section class="section" id="committee">
   <div class="section-head reveal">
-    <div class="kicker">The People</div>
+    <div class="kicker"><span class="num">05</span>The People</div>
     <h2 class="section-title">Meet the Committee</h2>
     <p class="section-desc">The team behind every post, photo, and story.</p>
   </div>
-  <div class="committee-grid reveal-stagger">
-    <div class="m-card">
-       <div class="m-avatar">
-        <img src="assets/krishnadutt.webp" alt="Krishnadutt Shrimali">
-    </div>
-      <div class="m-name">Krishnadutt Shrimali</div>
-      <div class="m-role">The Brand Alchemist</div>
-      <div class="m-links">
-        <a href="https://www.linkedin.com/in/krishnadutt-shrimali?utm_source=share_via&utm_content=profile&utm_medium=member_ios" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="mailto:krishnadutt.shrimali2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-    <div class="m-card">
-         <div class="m-avatar">
-        <img src="assets/omkar.webp" alt="Omkar Shelar">
-    </div>
-      
-      <div class="m-name">Omkar Shelar</div>
-      <div class="m-role">The Shot Maestro</div>
-      <div class="m-links">
-        <a href="https://www.linkedin.com/in/omkarshelar09/" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="mailto:omkar.shelar2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-    <div class="m-card">
-      <div class="m-avatar">
-        <img src="assets/Aditi.webp" alt="Aditi Verma">
-    </div>
-      <div class="m-name">Aditi Verma</div>
-      <div class="m-role">The Visual Voice</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-    <div class="m-card">
-      <div class="m-avatar">
-       <img src="assets/vartika.webp" alt="Vartika Srivatsav">
-      </div>
-      <div class="m-name">Vartika Srivatsav</div>
-      <div class="m-role">The Pixel Poet</div>
-      <div class="m-links">
-        <a href="https://www.linkedin.com/in/vartika-srivastava-17s/" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="mailto:vartika.srivastava2025@siib.ac.in" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-      <div class="m-card">
-      <div class="m-avatar">
-          <img src="assets/shubrajit.webp" alt="Shubhrajit Roy">
-      </div>
-      <div class="m-name">Shubhrajit Roy</div>
-      <div class="m-role">Master of Frames</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
- </div>
-      <div class="m-card">
-      <div class="m-avatar">
-          <img src="assets/sanchit.webp" alt="Sanchit Singh">
-      </div>
-      <div class="m-name">Sanchit Singh</div>
-      <div class="m-role">The Multitask Muse</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
- </div>
-      <div class="m-card">
-      <div class="m-avatar">
-          <img src="assets/sanidhya.webp" alt="Saanidhya Jugran">
-      </div>
-      <div class="m-name">Saanidhya Jugran</div>
-      <div class="m-role">The Story Weaver</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-</div>
-       <div class="m-card">
-      <div class="m-avatar">
-          <img src="assets/khushi.webp" alt="Khushi Zawar">
-      </div>
-      <div class="m-name">Khushi Zawar</div>
-      <div class="m-role">The Digital Voice</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-    
-     <div class="m-card">
-      <div class="m-avatar">
-              <img src="assets/aryaman.webp" alt="Aryaman Kashyap">
-      </div>
-      <div class="m-name">Aryaman Kashyap</div>
-      <div class="m-role">The Wordsmith</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-      <div class="m-card">
-      <div class="m-avatar">
-              <img src="assets/sara.webp" alt="Sarashree Joshi">
-      </div>
-      <div class="m-name">Sarashree Joshi</div>
-      <div class="m-role">The Creative Soul</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/purnendu.webp" alt="Purnendu Shekar">
-        </div>
-      <div class="m-name">Purnendu Shekar</div>
-      <div class="m-role">Shutter Maverick</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/yatee.webp" alt="Yatee Dodia">
-        </div>
-      <div class="m-name">Yatee Dodia</div>
-      <div class="m-role">The Tale Teller</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/riya.webp" alt="Riya Khandelwal">
-        </div>
-      <div class="m-name">Riya Khandelwal</div>
-      <div class="m-role">The Happy Canvas</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-              <img src="assets/aarya.webp" alt="Aarya Mandavgane">
-      </div>
-      <div class="m-name">Aarya Mandavgane</div>
-      <div class="m-role">The Creative Pulse</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/anushree.webp" alt="Anushree Rithe">
-        </div>
-      <div class="m-name">Anushree Rithe</div>
-      <div class="m-role">The Thought Painter</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/prajwal.webp" alt="Prajwal Lade">
-        </div>
-      <div class="m-name">Prajwal Lade</div>
-      <div class="m-role">The Reel Instinct</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/ujwal.webp" alt="Ujwal Raj K P">
-        </div>
 
-      <div class="m-name">Ujwal Raj K P</div>
-      <div class="m-role">The Off- Frame Artist</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
-     <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/sakshi.webp" alt="Sakshi Lokhande">
-        </div>
-      <div class="m-name">Sakshi Lokhande</div>
-      <div class="m-role">The Ink Whisperer</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-     </div>
+  <div class="reveal" id="facultyCard"></div>
 
-        <div class="m-card">
-      <div class="m-avatar">
-                <img src="assets/ansh.webp" alt="Ansh Sachan">
-        </div>
-      <div class="m-name">Ansh Sachan</div>
-      <div class="m-role">The Visual Storyteller</div>
-      <div class="m-links">
-        <a href="#" aria-label="LinkedIn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg></a>
-        <a href="#" aria-label="Email"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg></a>
-      </div>
-    </div>
-  </div>
+  <div class="sub-label reveal">Student Core Team</div>
+  <div class="committee-grid reveal-stagger" id="committeeGrid"></div>
 </section>
 
 <!-- CONTACT -->
 <section class="section" id="contact">
   <div class="section-head reveal">
-    <div class="kicker">Get in Touch</div>
+    <div class="kicker"><span class="num">06</span>Get in Touch</div>
     <h2 class="section-title">Contact the Committee</h2>
   </div>
   <div class="contact-card reveal">
@@ -1315,51 +664,270 @@ body{
 </section>
 
 <footer>
-<div class="foot-logo">
+  <div class="foot-logo">
     <img src="assets/logo.webp" alt="PRMC logo">
     <span>PR &amp; Media Committee</span>
-</div>
+  </div>
   <p>SYMBIOSIS INSTITUTE OF INTERNATIONAL BUSINESS · DESIGNED FOR THE SIIB ID CARD QR EXPERIENCE</p>
 </footer>
 
+<button class="to-top" id="toTop" aria-label="Back to top">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
 <script>
-  // nav show/hide on scroll
-  const nav = document.getElementById('navWrap');
-  const hero = document.getElementById('hero');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.target === hero){
-      nav.classList.toggle('show', !e.isIntersecting);
-    }
+/* =========================================================
+   DATA — edit these arrays to update site content.
+   No HTML editing needed for platforms / updates / campaigns / committee.
+========================================================= */
 
-    if(e.isIntersecting){
-      e.target.classList.add('in');
-    }
+const ICONS = {
+  instagram: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>',
+  linkedin: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg>',
+  youtube: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.5l5 2.5-5 2.5z" fill="currentColor" stroke="none"/></svg>',
+  facebook: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 3h-3a4 4 0 0 0-4 4v3H8v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>',
+  x: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l7.5 8.5L4.5 20H7l6-6.8L18 20h2l-8-9L19.5 4H17l-5.5 6.2L7 4z"/></svg>',
+  whatsapp: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3z"/><path d="M8.5 8.7c.2-.5.7-.5 1-.5s.5 0 .7.5c.2.5.6 1.4.6 1.5s0 .3-.2.5c-.2.3-.4.4-.6.6-.2.2-.3.4-.1.7.2.4 1 1.6 2.1 2.2 1.5.9 1.6.6 1.9.6.3-.1.9-.7 1.1-1 .2-.3.4-.2.7-.1.3.1 1.7.8 2 1 .3.1.5.2.5.4 0 .2 0 1-.4 1.5-.4.5-1.7 1.2-2.7.9-1-.3-2.8-1-4.4-2.6-1.6-1.6-2.1-2.9-2.3-3.4-.2-.5-.2-1.2.1-1.6z" fill="currentColor" stroke="none"/></svg>',
+  email: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>',
+  website: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>',
+  arrow: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M8 7h9v9"/></svg>'
+};
+
+const ICON_LINKEDIN_SMALL = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg>';
+const ICON_EMAIL_SMALL = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>';
+const ICON_LINKEDIN_BIG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4.5a2.5 2.5 0 0 1 5 0V17M12 10v7"/></svg>';
+const ICON_EMAIL_BIG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3.5 6.5L12 13l8.5-6.5"/></svg>';
+
+const PLATFORMS = [
+  { name:'Instagram', span2:true, icon:'instagram', desc:'Campus moments, event reels, and behind-the-scenes stories from SIIB — posted daily.', href:'https://www.instagram.com/siib.pune/?hl=en', label:'Follow @siib.pune' },
+  { name:'LinkedIn', icon:'linkedin', desc:'Achievements, placements, and institute announcements for the professional network.', href:'https://www.linkedin.com/school/symbiosis-institute-of-international-business/posts/?feedView=all', label:'Connect' },
+  { name:'YouTube', icon:'youtube', desc:'Event recaps, interviews, and the full SIIB Unlocked series.', href:'https://www.youtube.com/@OfficialSIIB', label:'Subscribe' },
+  { name:'Facebook', icon:'facebook', desc:'Institute news, alumni highlights, and community updates.', href:'https://www.facebook.com/SymbiosisInstituteOfInternationalBusiness/', label:'Like Page' },
+  { name:'X', icon:'x', desc:'Real-time updates, quick announcements, and campus commentary.', href:'https://x.com/SIIBTweets', label:'Follow' },
+  { name:'WhatsApp', icon:'whatsapp', desc:'Join our channel for the fastest campus-wide announcements.', href:'#', label:'Join Channel' },
+  { name:'Email', icon:'email', desc:'For media queries, collaborations, and press inquiries.', href:'mailto:pr@siib.ac.in', label:'pr@siib.ac.in' },
+  { name:'Website', icon:'website', desc:'The full SIIB institute website — programmes, admissions, and more.', href:'https://www.siib.ac.in', label:'siib.ac.in' }
+];
+
+const UPDATES = [
+  { tag:'Event', title:'Orientation Week Coverage Live', desc:"Full photo and video coverage of the new batch's orientation, now live across all channels.", date:'Aug 2026' },
+  { tag:'Campaign', title:'Opening Lines — Season 3', desc:'A new season of first-impression stories from the incoming SIIB batch.', date:'Aug 2026' },
+  { tag:'Campaign', title:'Alumni Speaks 3.0', desc:"The alumni's work featured for its campus storytelling approach.", date:'Jul 2026' }
+];
+
+const CAMPAIGNS = [
+  { title:'Opening Lines', desc:'First impressions and fresh voices from every new SIIB batch.', gradient:'linear-gradient(135deg,#800404,#2a0101)' },
+  { title:'Four Weeks Forward', desc:'A month-long series following student projects from idea to impact.', gradient:'linear-gradient(135deg,#3a0505,#0a0a0a)' },
+  { title:'Sunday Showcase', desc:'Weekly spotlight on standout work from across the SIIB community.', gradient:'linear-gradient(135deg,#5c0e1c,#111)' },
+  { title:'Student Stories', desc:'Personal journeys of resilience, ambition, and growth on campus.', gradient:'linear-gradient(135deg,#800404,#c21c1c)' },
+  { title:'Featured Faculty', desc:'Conversations with the educators shaping the SIIB curriculum.', gradient:'linear-gradient(135deg,#222,#800404)' },
+  { title:'SIIB Unlocked', desc:'Behind-the-scenes access to life, culture, and traditions at SIIB.', gradient:'linear-gradient(135deg,#340202,#800404)' }
+];
+
+const FACULTY = {
+  name:'Dr. Vandana Mehta', avatar:'assets/vandana.webp', label:'Faculty Coordinator',
+  role:'Faculty Coordinator, PR & Media Committee', linkedin:'#', email:'mailto:example@siib.ac.in'
+};
+
+const COMMITTEE = [
+  { name:'Krishnadutt Shrimali', role:'The Brand Alchemist', avatar:'assets/krishnadutt.webp', linkedin:'https://www.linkedin.com/in/krishnadutt-shrimali?utm_source=share_via&utm_content=profile&utm_medium=member_ios', email:'mailto:krishnadutt.shrimali2025@siib.ac.in' },
+  { name:'Omkar Shelar', role:'The Shot Maestro', avatar:'assets/omkar.webp', linkedin:'https://www.linkedin.com/in/omkarshelar09/', email:'mailto:omkar.shelar2025@siib.ac.in' },
+  { name:'Aditi Verma', role:'The Visual Voice', avatar:'assets/Aditi.webp', linkedin:'#', email:'#' },
+  { name:'Vartika Srivatsav', role:'The Pixel Poet', avatar:'assets/vartika.webp', linkedin:'https://www.linkedin.com/in/vartika-srivastava-17s/', email:'mailto:vartika.srivastava2025@siib.ac.in' },
+  { name:'Shubhrajit Roy', role:'Master of Frames', avatar:'assets/shubrajit.webp', linkedin:'#', email:'#' },
+  { name:'Sanchit Singh', role:'The Multitask Muse', avatar:'assets/sanchit.webp', linkedin:'#', email:'#' },
+  { name:'Saanidhya Jugran', role:'The Story Weaver', avatar:'assets/sanidhya.webp', linkedin:'#', email:'#' },
+  { name:'Khushi Zawar', role:'The Digital Voice', avatar:'assets/khushi.webp', linkedin:'#', email:'#' },
+  { name:'Aryaman Kashyap', role:'The Wordsmith', avatar:'assets/aryaman.webp', linkedin:'#', email:'#' },
+  { name:'Sarashree Joshi', role:'The Creative Soul', avatar:'assets/sara.webp', linkedin:'#', email:'#' },
+  { name:'Purnendu Shekar', role:'Shutter Maverick', avatar:'assets/purnendu.webp', linkedin:'#', email:'#' },
+  { name:'Yatee Dodia', role:'The Tale Teller', avatar:'assets/yatee.webp', linkedin:'#', email:'#' },
+  { name:'Riya Khandelwal', role:'The Happy Canvas', avatar:'assets/riya.webp', linkedin:'#', email:'#' },
+  { name:'Aarya Mandavgane', role:'The Creative Pulse', avatar:'assets/aarya.webp', linkedin:'#', email:'#' },
+  { name:'Anushree Rithe', role:'The Thought Painter', avatar:'assets/anushree.webp', linkedin:'#', email:'#' },
+  { name:'Prajwal Lade', role:'The Reel Instinct', avatar:'assets/prajwal.webp', linkedin:'#', email:'#' },
+  { name:'Ujwal Raj K P', role:'The Off-Frame Artist', avatar:'assets/ujwal.webp', linkedin:'#', email:'#' },
+  { name:'Sakshi Lokhande', role:'The Ink Whisperer', avatar:'assets/sakshi.webp', linkedin:'#', email:'#' },
+  { name:'Ansh Sachan', role:'The Visual Storyteller', avatar:'assets/ansh.webp', linkedin:'#', email:'#' }
+];
+
+const TICKER_ITEMS = ['Connecting Stories','Building Communities','Shaping the SIIB Experience','Follow the Committee'];
+
+/* =========================================================
+   RENDER
+========================================================= */
+function el(html){ const t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+
+function renderPlatforms(){
+  const grid = document.getElementById('platformsGrid');
+  PLATFORMS.forEach((p, i) => {
+    const card = el(`
+      <div class="card ${p.span2 ? 'span2' : ''}" style="--i:${i}">
+        <div class="plat-icon">${ICONS[p.icon]}</div>
+        <div class="plat-name">${p.name}</div>
+        <div class="plat-desc">${p.desc}</div>
+        <a class="plat-link" href="${p.href}" target="_blank" rel="noopener">${p.label} ${ICONS.arrow}</a>
+      </div>`);
+    grid.appendChild(card);
   });
-}, {
-  threshold:0.05
+}
+
+function renderUpdates(){
+  const grid = document.getElementById('updatesGrid');
+  UPDATES.forEach((u, i) => {
+    grid.appendChild(el(`
+      <div class="u-card" style="--i:${i}">
+        <span class="u-tag">${u.tag}</span>
+        <div class="u-title">${u.title}</div>
+        <div class="u-desc">${u.desc}</div>
+        <div class="u-date">${u.date}</div>
+      </div>`));
+  });
+}
+
+function renderCampaigns(){
+  const track = document.getElementById('carousel');
+  const dots = document.getElementById('carouselDots');
+  CAMPAIGNS.forEach((c, i) => {
+    track.appendChild(el(`
+      <div class="c-card" data-index="${i}">
+        <div class="c-media" style="background:${c.gradient};"><span class="num">${String(i+1).padStart(2,'0')}</span></div>
+        <div class="c-body"><div class="c-title">${c.title}</div><div class="c-desc">${c.desc}</div></div>
+      </div>`));
+    dots.appendChild(el(`<span data-index="${i}" class="${i===0 ? 'active':''}"></span>`));
+  });
+
+  const cards = [...track.children];
+  const dotEls = [...dots.children];
+  let ticking = false;
+  track.addEventListener('scroll', () => {
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const trackCenter = track.scrollLeft + track.clientWidth / 2;
+      let closest = 0, min = Infinity;
+      cards.forEach((c, i) => {
+        const cCenter = c.offsetLeft + c.clientWidth / 2;
+        const d = Math.abs(cCenter - trackCenter);
+        if(d < min){ min = d; closest = i; }
+      });
+      dotEls.forEach((d, i) => d.classList.toggle('active', i === closest));
+      ticking = false;
+    });
+  }, { passive:true });
+}
+
+function renderCommittee(){
+  const fCard = document.getElementById('facultyCard');
+  fCard.appendChild(el(`
+    <div class="faculty-card">
+      <div class="faculty-avatar"><img src="${FACULTY.avatar}" alt="${FACULTY.name}"></div>
+      <div class="faculty-info">
+        <div class="faculty-label">${FACULTY.label}</div>
+        <h3>${FACULTY.name}</h3>
+        <p>${FACULTY.role}</p>
+        <div class="faculty-links">
+          <a href="${FACULTY.linkedin}" aria-label="LinkedIn">${ICON_LINKEDIN_BIG}</a>
+          <a href="${FACULTY.email}" aria-label="Email">${ICON_EMAIL_BIG}</a>
+        </div>
+      </div>
+    </div>`));
+
+  const grid = document.getElementById('committeeGrid');
+  COMMITTEE.forEach((m, i) => {
+    grid.appendChild(el(`
+      <div class="m-card" style="--i:${i}">
+        <div class="m-avatar"><img src="${m.avatar}" alt="${m.name}"></div>
+        <div class="m-name">${m.name}</div>
+        <div class="m-role">${m.role}</div>
+        <div class="m-links">
+          <a href="${m.linkedin}" aria-label="LinkedIn">${ICON_LINKEDIN_SMALL}</a>
+          <a href="${m.email}" aria-label="Email">${ICON_EMAIL_SMALL}</a>
+        </div>
+      </div>`));
+  });
+}
+
+function renderTicker(){
+  const track = document.getElementById('tickerTrack');
+  const loopContent = TICKER_ITEMS.map(t => `<span>${t}</span>`).join('');
+  track.innerHTML = loopContent + loopContent; // duplicated for seamless loop
+}
+
+renderPlatforms();
+renderUpdates();
+renderCampaigns();
+renderCommittee();
+renderTicker();
+
+/* =========================================================
+   INTERACTIONS
+========================================================= */
+
+// loader
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  setTimeout(() => loader.classList.add('hide'), 350);
 });
+
+// nav show/hide + scroll progress + back-to-top, all driven off one scroll listener
+const nav = document.getElementById('navWrap');
+const hero = document.getElementById('hero');
+const progressEl = document.getElementById('scrollProgress');
+const toTopBtn = document.getElementById('toTop');
+
+function onScroll(){
+  const doc = document.documentElement;
+  const max = doc.scrollHeight - doc.clientHeight;
+  const p = max > 0 ? window.scrollY / max : 0;
+  progressEl.style.setProperty('--p', p.toFixed(4));
+  toTopBtn.classList.toggle('show', window.scrollY > window.innerHeight * 0.8);
+}
+window.addEventListener('scroll', onScroll, { passive:true });
+onScroll();
+
+toTopBtn.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+// reveal on scroll (with fallback for browsers without IntersectionObserver)
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.target === hero){
+        nav.classList.toggle('show', !e.isIntersecting);
+        return;
+      }
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold:0.05, rootMargin:'0px 0px -40px 0px' });
+
   io.observe(hero);
-  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el=>io.observe(el));
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('in'));
+  nav.classList.add('show');
+}
 
-  // cursor glow (desktop only)
-  const glow = document.getElementById('cursorGlow');
-  if(window.matchMedia('(pointer:fine)').matches){
-    window.addEventListener('mousemove', (e)=>{
-      glow.style.opacity = 1;
-      glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
-    });
-    document.addEventListener('mouseleave', ()=> glow.style.opacity = 0);
-  }
-
-  // card spotlight hover
-  document.querySelectorAll('.card').forEach(card=>{
-    card.addEventListener('mousemove', (e)=>{
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
+// cursor glow (desktop only)
+const glow = document.getElementById('cursorGlow');
+if(window.matchMedia('(pointer:fine)').matches){
+  window.addEventListener('mousemove', (e) => {
+    glow.style.opacity = 1;
+    glow.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%,-50%)`;
   });
+  document.addEventListener('mouseleave', () => glow.style.opacity = 0);
+}
+
+// card spotlight hover
+document.addEventListener('mousemove', (e) => {
+  const card = e.target.closest('.card');
+  if(!card) return;
+  const r = card.getBoundingClientRect();
+  card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
 </script>
 </body>
 </html>
