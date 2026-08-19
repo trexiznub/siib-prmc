@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>PR & Media Committee — SIIB</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <meta name="description" content="The official digital hub of the Public Relations & Media Committee, Symbiosis Institute of International Business. Connecting stories. Building communities. Shaping the SIIB experience.">
 <meta name="theme-color" content="#0A0A0A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -468,6 +469,86 @@
 
     border-color:transparent;
 }
+
+/* ---------- Mobile Responsive Fixes ---------- */
+
+@media(max-width:560px){
+
+  /* Committee cards */
+  .committee-grid{
+    grid-template-columns:1fr;
+    gap:18px;
+    width:100%;
+  }
+
+  .m-card{
+    padding:28px 20px;
+    border-radius:20px;
+  }
+
+  .m-avatar{
+    width:95px;
+    height:95px;
+  }
+
+  .m-name{
+    font-size:1.05rem;
+  }
+
+  .m-role{
+    font-size:10px;
+    line-height:1.6;
+    max-width:250px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .m-links a{
+    width:38px;
+    height:38px;
+  }
+
+
+  /* Faculty Coordinator Card */
+
+  .faculty-card{
+    width:100%;
+    max-width:100%;
+    margin:0 auto 50px;
+
+    padding:32px 20px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+
+    gap:20px;
+
+    border-radius:24px;
+  }
+
+
+  .faculty-avatar{
+    width:130px;
+    height:130px;
+  }
+
+
+  .faculty-info h3{
+    font-size:1.6rem;
+  }
+
+
+  .faculty-info p{
+    font-size:.95rem;
+  }
+
+
+  .faculty-links{
+    justify-content:center;
+    margin-top:20px;
+  }
 
 }
   /* ---------- contact ---------- */
